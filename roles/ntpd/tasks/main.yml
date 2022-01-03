@@ -1,0 +1,17 @@
+# tasks file for ntpd
+- name: Install ntpd
+  package:
+    name: '{{ ntp_packages }}'
+    state: latest
+
+- name: Start ntpd
+  systemd:
+    name: "{{ ntp_service }}"
+    state: started
+    enabled: true
+
+- name: setup/update ntp.conf
+  template:
+    src: "ntp.conf.j2"
+    dest: "{{ ntp_conf }}"
+  notify: restart ntpd
